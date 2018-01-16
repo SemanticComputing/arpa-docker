@@ -1,6 +1,6 @@
 # ARPA docker
 
-Container includes Arpa configuration, and example configurations.
+Container includes Arpa service, and example configurations.
 
 ## Run
 
