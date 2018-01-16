@@ -1,0 +1,17 @@
+{
+  "name" : "mooc-template-getty",
+  "endpointURL" : "htp://vocab.getty.edu/sparql",
+  "lasLocale" : "en",
+  "positiveLASFilters" : {
+    "" : [ null ]
+  },
+  "negativeLASFilters" : {
+    "" : [ null ]
+  },
+  "strongNegativeLASFilters" : {
+    "" : [ null ]
+  },
+  "query" : "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX skos: <http://www.w3.org/2004/02/skos/core#>\nSELECT ?c ?label ?ngram {\n  VALUES ?ngram {\n    <VALUES>\n  }\n  BIND(?ngram AS ?label)\n  #?id rdfs:label|skos:prefLabel ?label .\n  ?c gvp:placeType [rdfs:label \"republics\"@en] .\n  optional {?c xl:prefLabel [xl:literalForm ?labEn; dct:language gvp_lang:en] .\n    \t\tFILTER(?labEn = ?label) }\n  optional {?c gvp:prefLabelGVP [xl:literalForm ?labGVP] . FILTER(?labGVP = ?label)}\n}",
+  "depth" : 0,
+  "maxNGrams" : 3
+}

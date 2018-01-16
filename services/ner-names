@@ -1,0 +1,24 @@
+{
+  "name" : "ner-names",
+  "endpointURL" : "http://ldf.fi/viaf-labels/sparql",
+  "lasLocale" : "fi",
+  "queryUsingOriginalForm" : true,
+  "queryUsingBaseform" : true,
+  "queryUsingInflections" : [ ],
+  "queryModifyingEveryPart" : true,
+  "queryModifyingOnlyLastPart" : false,
+  "positiveLASFilters" : {
+    "UPOS" : [ "PROPN" ],
+    "PROPER" : [ "FIRST", "LAST" ]
+  },
+  "negativeLASFilters" : {
+    "CASE" : [ "INE" ]
+  },
+  "strongNegativeLASFilters" : {
+    "" : [ null ]
+  },
+  "guess" : true,
+  "query" : "PREFIX text: <http://jena.apache.org/text#>\nPREFIX pf: <http://jena.hpl.hp.com/ARQ/property#>\nPREFIX schema: <http://schema.org/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX wd: <http://www.wikidata.org/entity/>\nSELECT (<urn:foo> AS ?id) ?ngram {\n  SELECT DISTINCT ?ngram ?namepart ((MAX(?omorfiAccepted) && MIN(?notAPlace) || MIN(?accepted)) AS ?accepted2) {\n    VALUES (?ngram ?allowed) {\n      (<NGRAMSPLUSALLOWED>)\n    }\n    BIND(REPLACE(?ngram,\"^([A-ZÅÄÖ]\\\\. )*\",\"\") AS ?rngram)\n    FILTER (STRLEN(?rngram)>2 && ?rngram!=\"Helsing\" && REGEX(?rngram,\"^[A-ZÅÄÖ]\"))\n    ?namepart pf:strSplit (?rngram \" \")\n    OPTIONAL {\n      FILTER (REGEX(?namepart,\"^[A-ZÅÄÖ]\"))\n      VALUES (?ngram2 ?omorfiAccepted) {\n        (<NGRAMSPLUSALLOWED>)\n      }\n      FILTER(STR(?ngram2)=?namepart)\n    }\n    BIND(IF(STRLEN(?namepart)>8,\"~2\",IF(STRLEN(?namepart)>5,\"~1\",\"\")) AS ?fuzzy)\n    BIND(CONCAT(REPLACE(?namepart,\"([\\\\+\\\\-\\\\&\\\\|\\\\!\\\\(\\\\)\\\\{\\\\}\\\\[\\\\]\\\\^\\\\\\\"\\\\~\\\\*\\\\?\\\\:\\\\/\\\\\\\\])\",\"\\\\\\\\$1\"),?fuzzy) AS ?mngram)\n    OPTIONAL {\n      FILTER (REGEX(?namepart,\"^[A-ZÅÄÖ]\"))\n      BIND(true AS ?lexAccepted)\n      FILTER EXISTS {\n        ?la text:query ?mngram .\n        ?la a schema:Person .\n        ?la schema:name|schema:alternateName ?olabel .\n        FILTER (STRSTARTS(?olabel,SUBSTR(?namepart,1,2)) || CONTAINS(?olabel,CONCAT(\" \",SUBSTR(?namepart,1,2))))\n      }\n    }\n    OPTIONAL {\n      FILTER (BOUND(?lexAccepted) || BOUND(?omorfiAccepted))\n      SERVICE <http://ldf.fi/wikidata-place-names/sparql> {\n        BIND (true as ?isAPlace)\n        FILTER EXISTS {\n          ?isAP text:query ?mngram .\n          ?isAP wdt:P31 ?placeType .\n          FILTER (?placeType=wd:Q515 || ?placeType=wd:Q1549591 || ?placeType=wd:Q6256)\n        }\n      }\n    }\n    BIND(!BOUND(?isAPlace) AS ?notAPlace)\n    BIND(((BOUND(?omorfiAccepted) && ?omorfiAccepted) || BOUND(?lexAccepted)) && ?notAPlace AS ?accepted)\n  }\n  GROUP BY ?ngram ?namepart\n}\nGROUP BY ?ngram\nHAVING(MIN(?accepted2))",
+  "depth" : 0,
+  "maxNGrams" : 3
+}

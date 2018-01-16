@@ -1,0 +1,20 @@
+{
+  "name" : "warsa-dbpedia",
+  "endpointURL" : "http://ldf.fi/dbpedia-fi/sparql",
+  "lasLocale" : "fi",
+  "queryUsingBaseform" : true,
+  "queryModifyingEveryPart" : true,
+  "positiveLASFilters" : {
+    "" : [ null ]
+  },
+  "negativeLASFilters" : {
+    "UPOS" : [ "PRON", "VERB", "ADJ", "ADV", "CONJ" ]
+  },
+  "strongNegativeLASFilters" : {
+    "" : [ null ]
+  },
+  "guess" : true,
+  "query" : "PREFIX text: <http://jena.apache.org/text#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX skos: <http://www.w3.org/2004/02/skos/core#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX dbo: <http://dbpedia.org/ontology/>\nPREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>\nSELECT ?id ?label ?ngram ?source {\n  VALUES ?ngram {\n    <VALUES>\n  }\n  BIND(STRLANG(?ngram,<LANG>) AS ?label)\n  ?id rdfs:label ?label .\n  # QUERY\n  FILTER EXISTS {\n    ?id rdfs:comment ?gloss .\n  }\n  FILTER(!STRSTARTS(STR(?id),\"http://fi.dbpedia.org/resource/Luokka:\"))\n  FILTER(!STRSTARTS(STR(?id),\"http://fi.dbpedia.org/property/\"))\n  FILTER(!regex(?label, \"^[0-9]+$\"))\n  FILTER(!regex(?label, \"^[a-zA-ZäÄöÖåÅŠ]$\"))\n  FILTER(?id!=<http://fi.dbpedia.org/resource/Mies>)\n  FILTER(NOT EXISTS{ ?id <http://dbpedia.org/ontology/wikiPageWikiLink> <http://fi.dbpedia.org/resource/Persoonapronomini> })\n  FILTER(NOT EXISTS{ ?id <http://dbpedia.org/ontology/wikiPageWikiLink> <http://fi.dbpedia.org/resource/Pronomini> })\n  FILTER(NOT EXISTS{ ?id <http://dbpedia.org/ontology/wikiPageWikiLink> <http://fi.dbpedia.org/resource/Demonstratiivipronomini> })\n  FILTER(NOT EXISTS{ ?id <http://dbpedia.org/ontology/wikiPageWikiLink> <http://fi.dbpedia.org/resource/Konjunktio_(kielitiede)> })\n  FILTER(NOT EXISTS{ ?id <http://dbpedia.org/ontology/wikiPageWikiLink> <http://fi.dbpedia.org/resource/Kieltoverbi> })\n  FILTER(NOT EXISTS{ ?id <http://dbpedia.org/ontology/wikiPageWikiLink> <http://fi.dbpedia.org/resource/Luokka:Tilavuusyksiköt> })\n  FILTER(NOT EXISTS{ ?id <http://dbpedia.org/ontology/wikiPageWikiLink> <http://fi.dbpedia.org/resource/Metrijärjestelmä> })\n  FILTER(NOT EXISTS{ ?id <http://dbpedia.org/ontology/wikiPageWikiLink> <http://fi.dbpedia.org/resource/Kansainvälinen_yksikköjärjestelmä> })\n  FILTER(NOT EXISTS{ ?id <http://purl.org/dc/terms/subject> <http://fi.dbpedia.org/resource/Luokka:Pronominit> })\n  \n  \n  #FILTER((datatype(?label)) != xsd:integer)\n}",
+  "depth" : 0,
+  "maxNGrams" : 3
+}

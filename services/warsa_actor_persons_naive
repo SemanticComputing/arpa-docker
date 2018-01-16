@@ -1,0 +1,18 @@
+{
+  "name" : "warsa_actor_persons_naive",
+  "endpointURL" : "http://ldf.fi/warsa/sparql",
+  "lasLocale" : "fi",
+  "queryUsingOriginalForm" : true,
+  "queryUsingBaseform" : false,
+  "queryUsingInflections" : [ ],
+  "queryModifyingEveryPart" : false,
+  "queryModifyingOnlyLastPart" : false,
+  "queryUsingAllPermutations" : false,
+  "negativeLASFilters" : null,
+  "strongNegativeLASFilters" : null,
+  "positiveLASFilters" : null,
+  "guess" : false,
+  "query" : "PREFIX text: <http://jena.apache.org/text#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX skos: <http://www.w3.org/2004/02/skos/core#>\nPREFIX foaf: <http://xmlns.com/foaf/0.1/>\n\nSELECT DISTINCT ?id ?ngram ?label ?firstNames ?familyName {\n  VALUES ?ngram {\n    <VALUES>\n  }\n  BIND(CONCAT('\"',?ngram,'\"') AS ?qstring)\n  GRAPH <http://ldf.fi/warsa/actors> { ?id text:query ?qstring . }\n  ?id foaf:familyName ?familyName .\n  FILTER(str(?familyName) = ?ngram)\n  ?id skos:prefLabel ?label .\n  OPTIONAL { ?id foaf:firstName ?firstNames . }\n}",
+  "depth" : 0,
+  "maxNGrams" : 3
+}

@@ -1,0 +1,19 @@
+{
+  "name" : "onki-light",
+  "endpointURL" : "http://ldf.fi/onki-light/sparql",
+  "lasLocale" : "",
+  "queryUsingOriginalForm" : false,
+  "queryUsingBaseform" : true,
+  "queryUsingInflections" : [ ],
+  "queryModifyingEveryPart" : false,
+  "queryModifyingOnlyLastPart" : true,
+  "positiveLASFilters" : {
+    "" : [ null ]
+  },
+  "negativeLASFilters" : {
+    "" : [ null ]
+  },
+  "guess" : false,
+  "query" : "PREFIX text: <http://jena.apache.org/text#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX skos: <http://www.w3.org/2004/02/skos/core#>\nSELECT ?id ?label ?ngram {\n  VALUES ?ngram {\n    <VALUES>\n  }\n  BIND(CONCAT('\"',?ngram,'\"') AS ?qstring)\n  ?id text:query ?qstring .\n  ?id rdfs:label|skos:prefLabel ?label .\n  FILTER(LCASE(STR(?label))=LCASE(STR(?ngram)))\n}",
+  "maxNGrams" : 3
+}

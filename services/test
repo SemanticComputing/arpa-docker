@@ -1,0 +1,23 @@
+{
+  "name" : "test",
+  "endpointURL" : "http://ldf.fi/warsa/sparql",
+  "lasLocale" : "fi",
+  "queryUsingOriginalForm" : true,
+  "queryUsingBaseform" : true,
+  "queryUsingInflections" : [ ],
+  "queryModifyingEveryPart" : true,
+  "queryModifyingOnlyLastPart" : false,
+  "positiveLASFilters" : {
+    "" : [ null ]
+  },
+  "negativeLASFilters" : {
+    "PROPER" : [ "FIRST", "LAST" ]
+  },
+  "strongNegativeLASFilters" : {
+    "" : [ null ]
+  },
+  "guess" : false,
+  "query" : "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX skos: <http://www.w3.org/2004/02/skos/core#>\nPREFIX text: <http://jena.apache.org/text#>\n\nSELECT ?id ?label ?ngram {\n  VALUES ?ngram {\n    <VALUES>\n  }\n  #BIND(?ngram AS ?label)\n  #?id rdfs:label|skos:prefLabel ?label .\n    FILTER(STRLEN(?ngram)>2 &&  REGEX(?ngram,\"^[A-ZÅÄÖ]\"))\n  BIND(REPLACE(?ngram,\"([\\\\//\\\\#\\\\'\\\\<\\\\>\\\\+\\\\-\\\\&\\\\|\\\\!\\\\(\\\\)\\\\{\\\\}\\\\[\\\\]\\\\^\\\\\\\"\\\\~\\\\*\\\\?\\\\:\\\\\\\\])\",\"\\\\\\\\$1\") AS ?qstring)\n  ?id text:query ?qstring.\n}",
+  "depth" : 2,
+  "maxNGrams" : 3
+}

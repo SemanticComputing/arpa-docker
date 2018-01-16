@@ -1,0 +1,23 @@
+{
+  "name" : "ancore-la",
+  "endpointURL" : "http://ldf.fi/ancore/sparql",
+  "lasLocale" : "la",
+  "queryUsingOriginalForm" : true,
+  "queryUsingBaseform" : true,
+  "queryUsingInflections" : [ ],
+  "queryModifyingEveryPart" : true,
+  "queryModifyingOnlyLastPart" : false,
+  "positiveLASFilters" : {
+    "" : [ null ]
+  },
+  "negativeLASFilters" : {
+    "" : [ null ]
+  },
+  "strongNegativeLASFilters" : {
+    "" : [ null ]
+  },
+  "guess" : false,
+  "query" : "PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX dc: <http://purl.org/dc/elements/1.1/>\nPREFIX dbo: <http://dbpedia.org/ontology/>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX foaf: <http://xmlns.com/foaf/0.1/>\nPREFIX rdve3: <http://rdvocab.info/ElementsGr3/>\nPREFIX dct: <http://purl.org/dc/terms/>\nPREFIX oac: <http://www.openannotation.org/ns/>\nPREFIX text: <http://jena.apache.org/text#>\nSELECT ?id (?mngram AS ?label) ?ngram ?source {\n  {\n    VALUES ?ngram {\n      <VALUES>\n    }\n    FILTER(STRLEN(?ngram)>2 && REGEX(?ngram,\"^\\\\w\\\\. \"))\n    BIND(REPLACE(?ngram,\"#\\\\d\\\\b\",\"\") AS ?ngram2)\n    BIND(REPLACE(?ngram2,\"([\\\\//\\\\#\\\\'\\\\<\\\\>\\\\+\\\\-\\\\&\\\\|\\\\!\\\\(\\\\)\\\\{\\\\}\\\\[\\\\]\\\\^\\\\\\\"\\\\~\\\\*\\\\?\\\\:\\\\\\\\])\",\"\\\\\\\\$1\") AS ?ngram0)\n    BIND(REPLACE(?ngram0,\"^(\\\\w)\\\\. \",\"$1* \") AS ?ngram3)\n    BIND(REPLACE(?ngram3,\"\\\\b(\\\\w)\",\"+$1\") AS ?q)\n    ?id text:query (?q 3) .\n    ?id rdfs:label ?mngram .\n    FILTER(STRSTARTS(?mngram,SUBSTR(?ngram2,1,1)))\n    FILTER(CONTAINS(SUBSTR(?mngram,2),SUBSTR(?ngram2,4)))\n    BIND(4 AS ?source)\n  } UNION {\n    {\n      VALUES ?ngram {\n        <VALUES>\n      }\n      BIND(REPLACE(?ngram,\"#\\\\d\\\\b\",\"\") AS ?ngram2)\n      FILTER(STRLEN(?ngram)>2)\n      BIND(REPLACE(?ngram2,\"\\\\W$\",\"\") AS ?ngram3)\n      ?c dct:title|skos:prefLabel|rdfs:label|skos:altLabel|foaf:name ?ngram3 .\n      BIND(?ngram3 AS ?mngram)\n      BIND(1 AS ?source)    \n    } UNION {\n      VALUES ?ngram {\n        <VALUES>\n      }\n      FILTER(STRLEN(?ngram)>2)\n      BIND(REPLACE(?ngram,\"#\\\\d\\\\b\",\"\") AS ?ngram2)\n      BIND(REPLACE(?ngram2,\"\\\\W$\",\"\") AS ?ngram3)\n      BIND(STRLANG(CONCAT(UCASE(SUBSTR(?ngram3,1,1)),SUBSTR(?ngram3,2)),\"la\") AS ?ngram4)\n      ?c rdfs:label ?ngram4 .\n      BIND(?ngram4 AS ?mngram)\n      BIND(3 AS ?source)\n    }\n    ?c (owl:sameAs|^owl:sameAs|skos:exactMatch|^skos:exactMatch|foaf:primaryTopicOf|^foaf:primaryTopicOf)* ?id .\n    FILTER NOT EXISTS {\n      ?id a oac:Annotation .\n    }\n  } UNION {\n\tSERVICE <http://ldf.fi/dbpedia/sparql> {\n\t  SELECT ?mngram ?ngram ?id {\n\t    VALUES ?ngram {\n      \t  <VALUES>\n    \t}\n        FILTER(STRLEN(?ngram)>2 && UCASE(SUBSTR(?ngram,1,1))=SUBSTR(?ngram,1,1))\n    \tBIND(REPLACE(?ngram,\"#\\\\d\\\\b\",\"\") AS ?ngram2)\n    \tBIND(REPLACE(?ngram2,\"\\\\W$\",\"\") AS ?ngram3)\n        BIND(STRLANG(?ngram3,\"en\") AS ?mngram)\n\t\t?c rdfs:label ?mngram .\n\t\tFILTER(STRSTARTS(STR(?c),\"http://dbpedia.org/resource/\"))\n\t\tFILTER(!STRSTARTS(STR(?c),\"http://dbpedia.org/resource/Category:\"))\n\t\tFILTER EXISTS { ?c a ?type }\n\t\tFILTER NOT EXISTS {\n\t\t  ?c dbo:wikiPageDisambiguates ?other .\n\t\t}\n\t\tFILTER NOT EXISTS {\n\t\t  ?c a dbo:Album .\n\t\t}\n\t\tFILTER NOT EXISTS {\n\t\t  ?c a dbo:MusicalWork .\n\t\t}\n        FILTER NOT EXISTS {\n          ?c a dbo:Year .\n        }\n        FILTER NOT EXISTS {\n          ?c a dbo:Company .\n        }\n\t\t{\n\t\t  ?c dbo:wikiPageRedirects ?id .\n\t\t} UNION {\n\t\t  FILTER NOT EXISTS {\n\t\t    ?c dbo:wikiPageRedirects ?other .\n\t\t  }\n\t\t  BIND(?c as ?id)\n\t    }\n      }\n    }\n    BIND(2 AS ?source)\n  }\n}",
+  "depth" : 1,
+  "maxNGrams" : 4
+}

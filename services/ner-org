@@ -1,0 +1,24 @@
+{
+  "name" : "ner-org",
+  "endpointURL" : "http://ldf.fi/viaf-labels/sparql",
+  "lasLocale" : "fi",
+  "queryUsingOriginalForm" : true,
+  "queryUsingBaseform" : true,
+  "queryUsingInflections" : [ ],
+  "queryModifyingEveryPart" : true,
+  "queryModifyingOnlyLastPart" : false,
+  "positiveLASFilters" : {
+    "UPOS" : [ "PROPN" ],
+    "PROPER" : [ "ORG" ]
+  },
+  "negativeLASFilters" : {
+    "" : [ null ]
+  },
+  "strongNegativeLASFilters" : {
+    "" : [ null ]
+  },
+  "guess" : true,
+  "query" : "PREFIX text: <http://jena.apache.org/text#>\nPREFIX pf: <http://jena.hpl.hp.com/ARQ/property#>\nPREFIX schema: <http://schema.org/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX skos: <http://www.w3.org/2004/02/skos/core#>\nSELECT (<urn:foo> AS ?id) ?ngram {\n  SELECT DISTINCT ?ngram {\n    VALUES (?ngram ?isAnOrg) {\n      (<NGRAMSPLUSALLOWED>)\n    }\n    OPTIONAL {\n      FILTER (REGEX(?ngram,\"^[A-ZÅÄÖ]\"))\n      {\n        ?s schema:name|schema:alternateName ?ngram .\n        ?s a schema:Organization .\n      } UNION {\n        SERVICE <http://ldf.fi/cn/sparql> {\n          BIND(CONCAT(\"\\\"\",REPLACE(?ngram,\"([\\\\+\\\\-\\\\&\\\\|\\\\!\\\\(\\\\)\\\\{\\\\}\\\\[\\\\]\\\\^\\\\\\\"\\\\~\\\\*\\\\?\\\\:\\\\/\\\\\\\\])\",\"\\\\\\\\$1\"),\"\\\"\") AS ?query) \n          ?s text:query ?query .\n          ?s skos:prefLabel|skos:altLabel ?label .\n          FILTER(STR(?label)=?ngram)\n        }\n      }\n    }\n    FILTER(?isAnOrg || BOUND(?s))\n  }\n}\n",
+  "depth" : 0,
+  "maxNGrams" : 3
+}

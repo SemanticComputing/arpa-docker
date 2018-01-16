@@ -1,0 +1,25 @@
+{
+  "name" : "dbpedia-fi",
+  "endpointURL" : "http://ldf.fi/dbpedia-fi/sparql",
+  "lasLocale" : "fi",
+  "queryUsingOriginalForm" : false,
+  "queryUsingBaseform" : true,
+  "queryUsingInflections" : [ ],
+  "queryModifyingEveryPart" : false,
+  "queryModifyingOnlyLastPart" : true,
+  "positiveLASFilters" : {
+    "" : [ null ]
+  },
+  "negativeLASFilters" : {
+    "UPOS" : [ "PRON", "VERB", "ADJ", "ADV", "CONJ" ],
+    "PROPER" : [ "FIRST", "LASTUPOS", "LAST" ]
+  },
+  "strongNegativeLASFilters" : {
+    "UPOS" : [ "PRON", "VERB", "ADJ", "ADV", "CONJ" ],
+    "PROPER" : [ "FIRST", "LASTUPOS", "LAST" ]
+  },
+  "guess" : false,
+  "query" : "PREFIX text: <http://jena.apache.org/text#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX skos: <http://www.w3.org/2004/02/skos/core#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX dbo: <http://dbpedia.org/ontology/>\nPREFIX dct: <http://purl.org/dc/terms/>\nPREFIX dbpfi: <http://fi.dbpedia.org/resource/>\nSELECT ?id ?label ?ngram ?source {\n  #VALUES ?ngram {\n  #  <VALUES>\n  #}\n  { #Toinen_maailmansota\n    VALUES ?ngram {\n    <VALUES>\n  \t}\n    #FILTER(STRLEN(?ngram)>1 && REGEX(?ngram,\"^[A-ZÅÄÖ]\"))\n    BIND(STRLANG(CONCAT(UCASE(SUBSTR(?ngram,1,1)),LCASE(SUBSTR(?ngram,2))),<LANG>) AS ?label)\n    ?id rdfs:label ?label .\n    #?id dct:subject/skos:broader* dbpfi:Luokka:Toinen_maailmansota .\n    BIND(2 AS ?source)\n  } UNION {\n    VALUES ?ngram {\n    <VALUES>\n  \t}\n    #FILTER(STRLEN(?ngram)>1 && REGEX(?ngram,\"^[A-ZÅÄÖ]\"))\n    BIND(STRLANG(?ngram,<LANG>) AS ?label)\n    ?id rdfs:label ?label .\n    #?id dct:subject/skos:broader* dbpfi:Luokka:Toinen_maailmansota .\n    BIND(1 AS ?source)\n  }\n  # QUERY\n  FILTER(!STRSTARTS(STR(?id),\"http://fi.dbpedia.org/resource/Luokka:\"))\n  #FILTER(NOT EXISTS{ ?id <http://dbpedia.org/ontology/wikiPageWikiLink> <http://fi.dbpedia.org/resource/Metrijärjestelmä> })\n  #FILTER(NOT EXISTS{ ?id <http://dbpedia.org/ontology/wikiPageWikiLink> <http://fi.dbpedia.org/resource/Kansainvälinen_yksikköjärjestelmä> })\n  #FILTER(NOT EXISTS{ ?id <http://dbpedia.org/ontology/wikiPageWikiLink> <http://fi.dbpedia.org/resource/Luokka:Yksiköt> }) \n  #FILTER(NOT EXISTS{ ?id <http://dbpedia.org/ontology/wikiPageWikiLink> <http://fi.dbpedia.org/resource/Luokka:Historialliset_rahayksiköt> }) \n  #FILTER(NOT EXISTS{ ?id <http://dbpedia.org/ontology/wikiPageWikiLink> <http://fi.dbpedia.org/resource/Luokka:Rahayksiköt> }) \n  #Rahayksiköt\n}",
+  "depth" : 1,
+  "maxNGrams" : 3
+}

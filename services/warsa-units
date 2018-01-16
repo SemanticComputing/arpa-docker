@@ -1,0 +1,23 @@
+{
+  "name" : "warsa-units",
+  "endpointURL" : "http://ldf.fi/warsa/sparql",
+  "lasLocale" : "fi",
+  "queryUsingOriginalForm" : true,
+  "queryUsingBaseform" : true,
+  "queryUsingInflections" : [ ],
+  "queryModifyingEveryPart" : true,
+  "queryModifyingOnlyLastPart" : false,
+  "positiveLASFilters" : {
+    "" : [ null ]
+  },
+  "negativeLASFilters" : {
+    "" : [ null ]
+  },
+  "strongNegativeLASFilters" : {
+    "" : [ null ]
+  },
+  "guess" : true,
+  "query" : "PREFIX text: <http://jena.apache.org/text#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX skos: <http://www.w3.org/2004/02/skos/core#>\nPREFIX actors: <http://ldf.fi/warsa/actors/>\nPREFIX atypes: <http://ldf.fi/warsa/actors/actor_types/>\nSELECT ?id ?label ?ngram ?label {\n  VALUES ?ngram {\n    <VALUES>\n  }\n  #FILTER(STRLEN(?ngram)>2 && UCASE(SUBSTR(?ngram,1,1))=SUBSTR(?ngram,1,1))\n  FILTER(STRLEN(?ngram)>1 && REGEX(?ngram,\"^[A-ZÅÄÖ]\"))\n  BIND(CONCAT('\"',REPLACE(?ngram,\"([\\\\+\\\\-\\\\&\\\\|\\\\!\\\\(\\\\)\\\\{\\\\}\\\\[\\\\]\\\\^\\\\\\\"\\\\~\\\\*\\\\?\\\\:\\\\/\\\\\\\\])\",\"\\\\\\\\$1\"),'\"') AS ?label) \n  #GRAPH <http://ldf.fi/warsa/actors> { ?id text:query ?qstring . }\n  ?id a/rdfs:subClassOf* atypes:MilitaryUnit .\n  ?id rdfs:label|skos:prefLabel|skos:altLabel ?label .\n  #FILTER(LCASE(STR(?label))=LCASE(STR(?ngram)))\n}",
+  "depth" : 0,
+  "maxNGrams" : 5
+}

@@ -1,0 +1,23 @@
+{
+  "name" : "warsa-places",
+  "endpointURL" : "http://ldf.fi/warsa/sparql",
+  "lasLocale" : "fi",
+  "queryUsingOriginalForm" : true,
+  "queryUsingBaseform" : true,
+  "queryUsingInflections" : [ ],
+  "queryModifyingEveryPart" : true,
+  "queryModifyingOnlyLastPart" : true,
+  "positiveLASFilters" : {
+    "" : [ null ]
+  },
+  "negativeLASFilters" : {
+    "UPOS" : [ "ADJ" ]
+  },
+  "strongNegativeLASFilters" : {
+    "" : [ null ]
+  },
+  "guess" : true,
+  "query" : "PREFIX text: <http://jena.apache.org/text#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX skos: <http://www.w3.org/2004/02/skos/core#>\nPREFIX ptype: <http://ldf.fi/warsa/places/place_types/>\nPREFIX hipla: <http://ldf.fi/schema/hipla/>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nSELECT ?id ?label ?ngram ?type\nFROM <http://ldf.fi/warsa/places/municipalities>\nFROM <http://ldf.fi/warsa/places/karelian_places>\n{\n  VALUES ?ngram {\n    <VALUES>\n  }\n  FILTER(STRLEN(?ngram)>2 &&  REGEX(?ngram,\"^[A-ZÅÄÖ]\"))\n  BIND(REPLACE(?ngram,\"([\\\\//\\\\#\\\\'\\\\<\\\\>\\\\+\\\\-\\\\&\\\\|\\\\!\\\\(\\\\)\\\\{\\\\}\\\\[\\\\]\\\\^\\\\\\\"\\\\~\\\\*\\\\?\\\\:\\\\\\\\])\",\"\\\\\\\\$1\") AS ?qstring)\n  ?id text:query ?qstring.\n  ?id a ?type .\n  FILTER(?type=ptype:Kyla||ptype:Kirkonkyla_kaupunki||?type=<http://www.yso.fi/onto/suo/kunta>)\n  ?id rdfs:label|skos:prefLabel ?label .\n  FILTER(LCASE(STR(?label))=LCASE(STR(?qstring)))\n}",
+  "depth" : 0,
+  "maxNGrams" : 3
+}

@@ -1,0 +1,23 @@
+{
+  "name" : "warsa-event-place",
+  "endpointURL" : "http://ldf.fi/warsa/sparql",
+  "lasLocale" : "fi",
+  "queryUsingOriginalForm" : true,
+  "queryUsingBaseform" : true,
+  "queryUsingInflections" : [ ],
+  "queryModifyingEveryPart" : true,
+  "queryModifyingOnlyLastPart" : true,
+  "positiveLASFilters" : {
+    "UPOS" : [ "PROPN", "NOUN" ]
+  },
+  "negativeLASFilters" : {
+    "PROPER" : [ "FIRST", "LAST" ]
+  },
+  "strongNegativeLASFilters" : {
+    "" : [ null ]
+  },
+  "guess" : true,
+  "query" : "PREFIX text: <http://jena.apache.org/text#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX skos: <http://www.w3.org/2004/02/skos/core#>\nPREFIX hipla: <http://ldf.fi/schema/hipla/>\nPREFIX places: <http://ldf.fi/warsa/places>\nPREFIX ptype: <http://ldf.fi/warsa/places/place_types/>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nSELECT ?id ?label ?ngram ?type\n{\n    {\n        GRAPH <http://ldf.fi/warsa/places/municipalities> {\n            VALUES ?ngram {\n                <VALUES>\n            }\n            BIND(CONCAT('\"',?ngram,'\"') AS ?qstring)\n            ?id text:query ?qstring ;\n                a ?type ;\n                rdfs:label|skos:prefLabel ?label .\n            FILTER(str(?label) = ?ngram)\n        }\n    } UNION {\n        GRAPH <http://ldf.fi/warsa/places/karelian_places> {\n            VALUES ?ngram {\n                <VALUES>\n            }\n            BIND(CONCAT('\"',?ngram,'\"') AS ?qstring)\n            ?id text:query ?qstring ;\n                a ?type ;\n                rdfs:label|skos:prefLabel ?label .\n            FILTER(str(?label) = ?ngram)\n            MINUS {\n                ?id a ptype:Rakennettu_kohde .\n            }\n            MINUS {\n                ?id a ptype:Symboli .\n            }\n        }\n    } UNION {\n        SERVICE <http://ldf.fi/pnr/sparql> {\n            VALUES ?ngram {\n                <VALUES>\n            }\n            BIND(CONCAT('\"',?ngram,'\"') AS ?qstring)\n            ?id text:query ?qstring .\n            ?id a ?type .\n            FILTER(?type = <http://ldf.fi/pnr-schema#place_type_560> ||\n                ?type = <http://ldf.fi/pnr-schema#place_type_540>)\n            ?id rdfs:label|skos:prefLabel ?label .\n            FILTER(STR(?label)=STR(?ngram))\n        }\n    }\n}\nORDER BY ?id",
+  "depth" : 2,
+  "maxNGrams" : 3
+}

@@ -1,0 +1,23 @@
+{
+  "name" : "solutiondbpedia",
+  "endpointURL" : "http://dbpedia.org/sparql",
+  "lasLocale" : "en",
+  "queryUsingOriginalForm" : false,
+  "queryUsingBaseform" : true,
+  "queryUsingInflections" : [ ],
+  "queryModifyingEveryPart" : true,
+  "queryModifyingOnlyLastPart" : true,
+  "positiveLASFilters" : {
+    "" : [ null ]
+  },
+  "negativeLASFilters" : {
+    "" : [ null ]
+  },
+  "strongNegativeLASFilters" : {
+    "" : [ null ]
+  },
+  "guess" : false,
+  "query" : "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX skos: <http://www.w3.org/2004/02/skos/core#>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>\nPREFIX yago: <http://dbpedia.org/class/yago/>\nSELECT ?id ?label ?ngram {\n  VALUES ?ngram {\n    <VALUES>\n  }\n  BIND(STRLANG(?ngram,<LANG>) AS ?label) \n  ?id rdf:type yago:YagoGeoEntity .\n  ?id rdfs:label ?label .\n}",
+  "depth" : 1,
+  "maxNGrams" : 3
+}

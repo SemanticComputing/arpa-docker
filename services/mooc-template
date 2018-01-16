@@ -1,0 +1,17 @@
+{
+  "name" : "mooc-template-dbpedia",
+  "endpointURL" : "http://dbpedia.org/sparql",
+  "lasLocale" : "en",
+  "positiveLASFilters" : {
+    "" : [ null ]
+  },
+  "negativeLASFilters" : {
+    "" : [ null ]
+  },
+  "strongNegativeLASFilters" : {
+    "" : [ null ]
+  },
+  "query" : "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX skos: <http://www.w3.org/2004/02/skos/core#>\nSELECT ?id ?label ?ngram {\n  VALUES ?ngram {\n    <VALUES>\n  }\n  BIND(?ngram AS ?label)\n  ?id rdfs:label|skos:prefLabel ?label .\n  FILTER(STRSTARTS(STR(?sub),\"http://dbpedia.org/resource\"))\n}",
+  "depth" : 0,
+  "maxNGrams" : 3
+}

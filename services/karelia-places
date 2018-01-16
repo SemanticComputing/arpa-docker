@@ -1,0 +1,23 @@
+{
+  "name" : "karelia-places",
+  "endpointURL" : "http://ldf.fi/warsa/sparql",
+  "lasLocale" : "fi",
+  "queryUsingOriginalForm" : false,
+  "queryUsingBaseform" : true,
+  "queryUsingInflections" : [ ],
+  "queryModifyingEveryPart" : false,
+  "queryModifyingOnlyLastPart" : true,
+  "positiveLASFilters" : {
+    "" : [ null ]
+  },
+  "negativeLASFilters" : {
+    "" : [ null ]
+  },
+  "strongNegativeLASFilters" : {
+    "" : [ null ]
+  },
+  "guess" : false,
+  "query" : "PREFIX text: <http://jena.apache.org/text#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX skos: <http://www.w3.org/2004/02/skos/core#>\nPREFIX hipla: <http://ldf.fi/schema/hipla/>\nPREFIX places: <http://ldf.fi/warsa/places>\nPREFIX ptype: <http://ldf.fi/warsa/places/place_types/>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nSELECT ?id ?label ?ngram ?type\n{\n  VALUES ?ngram {\n    <VALUES>\n  }\n  BIND(STRLANG(?ngram,\"fi\") AS ?label)\n  ?id rdfs:label|skos:prefLabel ?label .\n  ?id rdf:type/rdfs:subClassOf* hipla:Place .        \n  ?id a ?type .\n  MINUS { \n    ?id a ptype:Rakennettu_kohde .\n  }\n  MINUS { \n    ?id a ptype:Symboli .\n  }\n  \n}",
+  "depth" : 1,
+  "maxNGrams" : 2
+}

@@ -1,0 +1,18 @@
+{
+  "name" : "menehtyneet_persons",
+  "endpointURL" : "http://ldf.fi/warsa/sparql",
+  "lasLocale" : "fi",
+  "queryUsingOriginalForm" : true,
+  "queryUsingBaseform" : false,
+  "queryUsingInflections" : [ ],
+  "queryModifyingEveryPart" : false,
+  "queryModifyingOnlyLastPart" : false,
+  "queryUsingAllPermutations" : false,
+  "negativeLASFilters" : null,
+  "strongNegativeLASFilters" : null,
+  "positiveLASFilters" : null,
+  "guess" : false,
+  "query" : "PREFIX text: <http://jena.apache.org/text#>\nPREFIX apf: <http://jena.hpl.hp.com/ARQ/property#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX skos: <http://www.w3.org/2004/02/skos/core#>\nPREFIX foaf: <http://xmlns.com/foaf/0.1/>\nPREFIX actors: <http://ldf.fi/warsa/actors/>\nPREFIX etype: <http://ldf.fi/warsa/events/event_types/>\nPREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX cas: <http://ldf.fi/schema/narc-menehtyneet1939-45/>\nPREFIX dc: <http://purl.org/dc/elements/1.1/>\n\nSELECT DISTINCT ?id ?ngram (COALESCE(?nlabel, ?plabel) AS ?label) ?rank_label ?etunimet ?sukunimi ?birth_start ?birth_end ?death_start ?death_end\nWHERE {\n    VALUES ?ngram {\n        <VALUES>\n    }\n\n    BIND(REPLACE(?ngram, \\\"[-/]\\\", \\\" \\\") AS ?ngram2)\n    BIND(REPLACE(?ngram2,\\\"([a-zåäöéèüáóA-ZÅÄÖÈÉĚȨÜÁÀÃÓÒÕ]+)\\\", IF(?ngram = ?ngram2, \\\"$1~\\\", \\\"$1~1\\\")) AS ?qstring)\n\n    GRAPH <http://ldf.fi/warsa/actors> { ?id text:query ?qstring . }\n    OPTIONAL { ?id dc:source ?source . }\n    FILTER(IF(BOUND(?source), ?source != <http://ldf.fi/warsa/sources/source9>, 1=1))\n    ?id foaf:familyName ?sukunimi .\n    ?id skos:prefLabel ?plabel .\n    OPTIONAL { ?id foaf:firstName ?etunimet . }\n    OPTIONAL {\n        ?promotion_id a etype:Promotion ;\n            crm:P11_had_participant ?id ;\n            actors:hasRank ?promotion_rank_id ;\n            crm:P4_has_time-span ?timespan_id .\n        ?promotion_rank_id skos:prefLabel ?rank_label .\n    }\n    OPTIONAL {\n        ?birth crm:P98_brought_into_life ?id .\n        ?birth crm:P4_has_time-span ?birth_date_id .\n        ?birth_date_id crm:P82a_begin_of_the_begin ?birth_start ;\n        crm:P82b_end_of_the_end ?birth_end .\n        OPTIONAL { ?birth dc:source ?birth_source . }\n        FILTER(IF(BOUND(?birth_source), ?birth_source != <http://ldf.fi/warsa/sources/source9>, 1=1))\n    }\n    OPTIONAL {\n        ?death crm:P100_was_death_of ?id .\n        ?death crm:P4_has_time-span ?death_date_id .\n        ?death_date_id crm:P82a_begin_of_the_begin ?death_start ;\n                    crm:P82b_end_of_the_end ?death_end .\n        OPTIONAL { ?death dc:source ?death_source . }\n        FILTER(IF(BOUND(?death_source), ?death_source != <http://ldf.fi/warsa/sources/source9>, 1=1))\n    }\n}",
+  "depth" : 0,
+  "maxNGrams" : 5
+}

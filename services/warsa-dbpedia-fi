@@ -1,0 +1,24 @@
+{
+  "name" : "warsa-dbpedia-fi",
+  "endpointURL" : "http://ldf.fi/dbpedia-fi/sparql",
+  "lasLocale" : "fi",
+  "queryUsingOriginalForm" : false,
+  "queryUsingBaseform" : true,
+  "queryUsingInflections" : [ ],
+  "queryModifyingEveryPart" : true,
+  "queryModifyingOnlyLastPart" : true,
+  "positiveLASFilters" : {
+    "UPOS" : [ "PROPN", "NOUN" ]
+  },
+  "negativeLASFilters" : {
+    "UPOS" : [ "PRON", "VERB", "ADJ", "ADV", "CONJ" ],
+    "PROPER" : [ "FIRST", "LAST" ]
+  },
+  "strongNegativeLASFilters" : {
+    "UPOS" : [ "PRON", "VERB", "ADJ", "ADV", "CONJ" ]
+  },
+  "guess" : false,
+  "query" : "PREFIX text: <http://jena.apache.org/text#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX skos: <http://www.w3.org/2004/02/skos/core#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX dbo: <http://dbpedia.org/ontology/>\nPREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>\nPREFIX dct: <http://purl.org/dc/terms/>\nPREFIX dbpfi: <http://fi.dbpedia.org/resource/>\nSELECT ?id ?label ?ngram ?source {\n  VALUES ?ngram {\n    <VALUES>\n  }\n  FILTER(!regex(?label, \"^[0-9]+$\"))\n  FILTER(!regex(?label, \"^[a-zA-ZäÄöÖåÅŠ]$\"))\n  BIND(STRLANG(CONCAT(UCASE(SUBSTR(?ngram,1,1)),LCASE(SUBSTR(?ngram,2))),\"fi\") AS ?label)\n\n  ?id rdfs:label ?label .\n  { ?id dct:subject/skos:broader* dbpfi:Luokka:Toinen_maailmansota . } UNION {\n   ?id dct:subject/skos:broader* dbpfi:Luokka:Sodankäynti .\n  } UNION {\n    ?id dct:subject/skos:broader* dbpfi:Luokka:Sotahistorian_teemasivun_luokat .\n  #Sotahistorian_teemasivun_luokat\n  } UNION {\n    ?id dct:subject/skos:broader* dbpfi:Luokka:Henkilöt_aikakausittain .\n  }\n  FILTER(!STRSTARTS(STR(?id),\"http://fi.dbpedia.org/resource/Luokka:\"))\n  FILTER(!STRSTARTS(STR(?id),\"http://fi.dbpedia.org/property/\"))\n}\n  \n  \n  \n  \n  ",
+  "depth" : 1,
+  "maxNGrams" : 3
+}

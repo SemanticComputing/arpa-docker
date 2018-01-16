@@ -1,0 +1,13 @@
+{
+  "name" : "kata_persons",
+  "endpointURL" : "http://ldf.fi/warsa/sparql",
+  "lasLocale" : "fi",
+  "queryUsingOriginalForm" : true,
+  "queryUsingBaseform" : true,
+  "queryUsingInflections" : [ ],
+  "queryModifyingEveryPart" : false,
+  "queryModifyingOnlyLastPart" : false,
+  "queryUsingAllPermutations" : false,
+  "query" : "PREFIX text: <http://jena.apache.org/text#>\nPREFIX apf: <http://jena.hpl.hp.com/ARQ/property#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX skos: <http://www.w3.org/2004/02/skos/core#>\nPREFIX foaf: <http://xmlns.com/foaf/0.1/>\nPREFIX actors: <http://ldf.fi/warsa/actors/>\nPREFIX etype: <http://ldf.fi/warsa/events/event_types/>\nPREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>\n\n#?id ?ngram ?ngrametu ?etunimet ?sukunimi \nSELECT * #?id ?ngram ?ngrametu ?etunimet ?sukunimi\nWHERE\n{  \n    VALUES ?ngram {\n        <VALUES>\n    }\n  \tBIND(UCASE(?ngram) AS ?hakusana)\n  \tFILTER(STRLEN(?ngram)>2 && UCASE(SUBSTR(?ngram,1,1))=SUBSTR(?ngram,1,1))\n    # Henkilö löytyy ainoastaan, jos haussa käytetään sukunimeä JA etunimeä/etunimiä (tai niiden ensimmäisiä kirjaimia, ILMAN pistettä).\n  \n    # Oletus: sukunimi aina ensimmäisenä\n  \tBIND(\"^([a-zA-ZäÄåÅöÖ-]+)[ ]([a-zA-ZäÄåÅöÖ-]+)[ ]?([a-zA-ZäÄåÅöÖ]*)[ ]?([a-zA-ZäÄåÅöÖ]*)?$\" AS ?nimiregex)\n  \t#BIND(\"^(.+?[. ])[ ]*(.+?[. ])*[ ]*(.+)$\" AS ?nimiregex)\n  \tBIND(UCASE(REPLACE(?ngram, ?nimiregex, \"$1\")) AS ?sukunimi)\n    # Etunimi tai toinen nimi/etunimi (ja trimmataan mahdolliset välilyönnit)\n    BIND(REPLACE(REPLACE(?ngram, ?nimiregex, \"$2\"), \"^(.*?)[ ]*$\", \"$1\") AS ?ngrametu)\n    BIND(REPLACE(REPLACE(?ngram, ?nimiregex, \"$3\"), \"^(.*?)[ ]*$\", \"$1\") AS ?ngramkeski)\n  \tBIND(REPLACE(REPLACE(?ngram, ?nimiregex, \"$4\"), \"^(.*?)[ ]*$\", \"$1\") AS ?ngramkolmas)\n  \n    FILTER(STRLEN(?ngrametu)>0)\n    # Joko ei toista nimeä tai samat ehdot kuin etunimellä.\n  \n    BIND(UCASE(?ngrametu) AS ?etu)\n    BIND(UCASE(?ngramkeski) AS ?keski)\n    BIND(UCASE(?ngramkolmas) AS ?kolmas)\n    BIND(CONCAT('\"',?sukunimi,'\"') AS ?qstring)\n    \n\tBIND(CONCAT(?etu,' ',?keski, ' ', ?kolmas) AS ?fNames)\n    BIND(REPLACE(?fNames, \"[ ]*$\", \"\") AS ?firstNames)\n  \n    #GRAPH <http://ldf.fi/warsa/actors> { ?id text:query ?qstring . }\n    ?id foaf:familyName ?familyName .\n       FILTER(?sukunimi = UCASE(?familyName))\n    ?id foaf:firstName ?etunimet .\n       FILTER(LCASE(?firstNames) = LCASE(REPLACE(?etunimet, \"\\\\.\", \"\")))\n}",
+  "maxNGrams" : 4
+}

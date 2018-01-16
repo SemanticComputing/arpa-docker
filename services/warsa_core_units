@@ -1,0 +1,13 @@
+{
+  "name" : "warsa_core_units",
+  "endpointURL" : "http://ldf.fi/warsa/sparql",
+  "lasLocale" : "fi",
+  "queryUsingOriginalForm" : false,
+  "queryUsingBaseform" : true,
+  "queryUsingInflections" : [ ],
+  "queryModifyingEveryPart" : true,
+  "queryModifyingOnlyLastPart" : false,
+  "queryUsingAllPermutations" : false,
+  "query" : "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX skos: <http://www.w3.org/2004/02/skos/core#>\nPREFIX wa: <http://ldf.fi/warsa/actors/>\nPREFIX wat: <http://ldf.fi/warsa/actors/actor_types/>\nPREFIX foaf: <http://xmlns.com/foaf/0.1/>\n\nSELECT ?id ?label ?ngram {\n  {\n    VALUES ?ngram {\n      <VALUES>\n    }\n  \tFILTER(STRLEN(?ngram)>2 && UCASE(SUBSTR(?ngram,1,1))=SUBSTR(?ngram,1,1))\n    BIND(?ngram AS ?label)\n    ?id skos:altLabel ?label .\n  } UNION {\n    VALUES ?ngram {\n      <VALUES>\n    }\n  \tFILTER(STRLEN(?ngram)>2 && UCASE(SUBSTR(?ngram,1,1))=SUBSTR(?ngram,1,1))\n    BIND(STRLANG(?ngram,\"fi\") AS ?label)\n    ?id skos:prefLabel ?label .\n  }\n  ?id a wat:MilitaryUnit .\n}\n",
+  "maxNGrams" : 3
+}

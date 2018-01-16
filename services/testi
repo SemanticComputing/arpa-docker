@@ -1,0 +1,23 @@
+{
+  "name" : "testi",
+  "endpointURL" : "http://ldf.fi/warsa/sparql",
+  "lasLocale" : null,
+  "queryUsingOriginalForm" : false,
+  "queryUsingBaseform" : true,
+  "queryUsingInflections" : [ ],
+  "queryModifyingEveryPart" : false,
+  "queryModifyingOnlyLastPart" : false,
+  "positiveLASFilters" : {
+    "" : [ null ]
+  },
+  "negativeLASFilters" : {
+    "" : [ null ]
+  },
+  "strongNegativeLASFilters" : {
+    "" : [ null ]
+  },
+  "guess" : false,
+  "query" : "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX skos: <http://www.w3.org/2004/02/skos/core#>\nSELECT ?id ?label ?ngram {\n  VALUES ?ngram {\n    \"Johannes\"\n  }\n  BIND(?ngram AS ?label)\n  ?id rdfs:label|skos:prefLabel ?label .\n}",
+  "depth" : 1,
+  "maxNGrams" : 3
+}

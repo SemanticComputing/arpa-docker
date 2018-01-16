@@ -1,0 +1,23 @@
+{
+  "name" : "nbf_place",
+  "endpointURL" : "http://ldf.fi/nbf/sparql",
+  "lasLocale" : "fi",
+  "queryUsingOriginalForm" : true,
+  "queryUsingBaseform" : true,
+  "queryUsingInflections" : [ ],
+  "queryModifyingEveryPart" : true,
+  "queryModifyingOnlyLastPart" : true,
+  "positiveLASFilters" : {
+    "" : [ null ]
+  },
+  "negativeLASFilters" : {
+    "" : [ null ]
+  },
+  "strongNegativeLASFilters" : {
+    "" : [ null ]
+  },
+  "guess" : true,
+  "query" : "PREFIX text: <http://jena.apache.org/text#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX skos: <http://www.w3.org/2004/02/skos/core#>\nPREFIX nbf:    <http://ldf.fi/nbf/>\nSELECT ?id ?label ?ngram {\n  VALUES ?ngram {\n    <VALUES>\n  }\n  BIND(CONCAT('\"',?ngram,'\"') AS ?qstring)\n  ?id text:query ?qstring .\n  ?id a ?type .\n  FILTER(?type = nbf:Place)\n  ?id skos:prefLabel|skos:altLabel ?label .\n  FILTER(LCASE(STR(?label))=LCASE(STR(?ngram)))\n}",
+  "depth" : 2,
+  "maxNGrams" : 3
+}
