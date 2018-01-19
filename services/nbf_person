@@ -1,0 +1,23 @@
+{
+  "name" : "nbf_person",
+  "endpointURL" : "http://ldf.fi/nbf/sparql",
+  "lasLocale" : "fi",
+  "queryUsingOriginalForm" : true,
+  "queryUsingBaseform" : true,
+  "queryUsingInflections" : [ ],
+  "queryModifyingEveryPart" : true,
+  "queryModifyingOnlyLastPart" : true,
+  "positiveLASFilters" : {
+    "" : [ null ]
+  },
+  "negativeLASFilters" : {
+    "" : [ null ]
+  },
+  "strongNegativeLASFilters" : {
+    "" : [ null ]
+  },
+  "guess" : true,
+  "query" : "PREFIX text: <http://jena.apache.org/text#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX skos: <http://www.w3.org/2004/02/skos/core#>\nPREFIX skosxl: <http://www.w3.org/2008/05/skos-xl#>\nPREFIX foaf: <http://xmlns.com/foaf/0.1/>\nPREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX dct: <http://purl.org/dc/terms/>\nPREFIX schema: <http://schema.org/>\n\nSELECT DISTINCT ?id ?ngram (COALESCE(?nlabel, ?plabel) AS ?label) ?first_names ?family_name \nWHERE {\n{\n    SELECT DISTINCT ?lid ?ngram {\n    VALUES ?ngram {\n        <VALUES>\n    }\n    FILTER(STRLEN(?ngram)>2)\n    BIND(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(?ngram, '\\\\.$', ''), '[áà]', 'a'), '[éè]', 'e'), '[íì]', 'i'), '[óò]', 'o'), '[úù]', 'u'), '[ýỳ]', 'y'), 'W', 'V') AS ?n_ngram)\n    BIND(\"^((?:[a-zA-ZäÄåÅöÖüÜ]\\\\.[ ]*)|(?:[a-zA-ZäÄöÖåÅüÜ-]{3,}[ ]+))((?:-?[a-zA-ZäÄåÅöÖüÜ]\\\\.[ ]*)|(?:[a-zA-ZäÄöÖåÅüÜ-]{3,}[ ]+))?((?:[a-zA-ZäÄåÅöÖüÜ]\\\\.[ ]*)|(?:[a-zA-ZäÄöÖåÅüÜ-]{3,}[ ]+))*([_a-zA-ZäÄöÖåÅüÜ-]{3,})$\" AS ?nimiregex)\n    BIND(REPLACE(REPLACE(?n_ngram, ?nimiregex, \"$4\"), \"_\", \" \") AS ?family_name)\n    BIND(REPLACE(REPLACE(?n_ngram, ?nimiregex, \"$1\"), \"^(.*?)[ ]*$\", \"$1\") AS ?ngrametu)\n    BIND(REPLACE(REPLACE(?n_ngram, ?nimiregex, \"$2\"), \"^(.*?)[ ]*$\", \"$1\") AS ?ngramkeski)\n    BIND(UCASE(?ngrametu) AS ?etu)\n    FILTER(?ngramkeski=\"\" || !(STRENDS(?ngrametu, \".\") && !STRENDS(?ngramkeski, \".\")))\n    BIND(UCASE(REPLACE(?ngramkeski, '^-', '')) AS ?keski)\n    BIND(CONCAT(REPLACE(REPLACE(?family_name, \"-\\\\s*$\", \"\"), \"-\", \"~1 \"), \"~1\") AS ?qstring)\n    BIND(REPLACE(?qstring, 'V', 'W') AS ?qstring2)\n\n    GRAPH <http://ldf.fi/nbf/people> { { ?lid text:query ?qstring . } UNION { ?lid text:query ?qstring2 . } }\n    ?lid schema:familyName ?familyName_orig .\n    BIND(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(?familyName_orig, '[áà]', 'a'), '[éè]', 'e'), '[íì]', 'i'), '[óò]', 'o'), '[úù]', 'u'), '[ýỳ]', 'y'), 'W', 'V') AS ?familyName)\n      FILTER((UCASE(STR(?family_name)) = UCASE(STR(?familyName))) || (CONTAINS(?familyName, \"(\") || CONTAINS(?familyName, \".\")) && REGEX(?familyName, CONCAT(\"^\", ?family_name, \"\\\\b\"), \"i\"))\n\t\n      OPTIONAL { ?lid schema:givenName ?fnames . BIND(REPLACE(REPLACE(STR(?fnames), \"[)(]\", \"\"), 'W', 'V') AS ?first_names) }\n      BIND(CONCAT(\"(^|[ ])\", substr(?etu, 1, 1)) as ?etukirjainre)\n    BIND(CONCAT(\"(^|[ -])\", substr(?keski, 1, 1)) as ?keskikirjainre)\n    BIND(CONCAT(\"(^|[ ])\", ?etu, \"($|[ ])\") AS ?etunimire)\n    BIND(CONCAT(\"(^|[ -])\", ?keski, \"($|[ ])\") AS ?toinennimire)\n    BIND(IF(STRLEN(?keski)=2, ?keskikirjainre, IF(?keski=\"\", \".\", ?toinennimire)) AS ?keskire)\n    BIND(IF(STRLEN(?etu)=2, ?etukirjainre, ?etunimire) AS ?eture)\n    BIND(CONCAT(\"(^|[ ])\", ?etu, \" \", ?keski, \"($|[ ])\") AS ?longrankre)\n    FILTER(\n        IF(STRENDS(?etu, \".\"),\n        REGEX(?first_names, ?etukirjainre) && REGEX(?first_names, ?keskire),\n        (REGEX(?first_names, ?keskire, \"i\") && (REGEX(?first_names, ?eture, \"i\"))) ||\n        IF(?keski != \"\",\n            ?rank_test && REGEX(?first_names, ?keskire, \"i\")\n            || ?long_rank_test || (?minister_test && REGEX(?first_names, ?keskire, \"i\")),\n            ?minister_test || ?rank_test || ?long_rank_test\n        )\n        )\n    )\n    }\n}\n?id skosxl:prefLabel ?lid .\nFILTER not exists { ?id owl:sameAs [] }\n?lid schema:familyName ?family_name .\nOPTIONAL { ?lid skos:prefLabel ?plabel }\nOPTIONAL { ?lid schema:givenName ?fnames . BIND(REPLACE(?fnames, \"[)(]\", \"\") AS ?first_names) }\nBIND(CONCAT(?first_names, ' ', ?familyName) AS ?nlabel)\n\n}",
+  "depth" : 2,
+  "maxNGrams" : 3
+}
