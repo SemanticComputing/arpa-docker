@@ -8,7 +8,9 @@ services:
       - ANALYZE_ADDRESS=http://las:9000/las/analyze
     volumes:
       - ./services:/opt/docker/services
+    restart: unless-stopped
   las:
     image: "jiemakel/las-ws:1.1"
     ports:
       - "19990:9000"
+    restart: unless-stopped
