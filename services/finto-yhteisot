@@ -1,0 +1,24 @@
+{
+  "name" : "finto-yhteisot",
+  "endpointURL" : "http://api.finto.fi/sparql",
+  "lasLocale" : "fi",
+  "queryUsingOriginalForm" : true,
+  "queryUsingBaseform" : true,
+  "queryUsingInflections" : [ ],
+  "queryModifyingEveryPart" : true,
+  "queryModifyingOnlyLastPart" : false,
+  "positiveLASFilters" : {
+    "UPOS" : [ "PROPN", "NOUN" ]
+  },
+  "negativeLASFilters" : {
+    "UPOS" : [ "PRON", "VERB", "ADJ", "ADV", "CONJ" ],
+    "PROPER" : [ "FIRST", "LAST" ]
+  },
+  "strongNegativeLASFilters" : {
+    "PROPER" : [ "FIRST", "LAST" ]
+  },
+  "guess" : false,
+  "query" : "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX skos: <http://www.w3.org/2004/02/skos/core#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nSELECT ?id ?label ?ngram {\n  VALUES ?ngram {\n    <VALUES>\n  }\n  #http://urn.fi/URN:NBN:fi:au:cn:\n\n  BIND(?ngram AS ?label)\n  GRAPH <http://urn.fi/URN:NBN:fi:au:cn:> {\n  ?id rdf:type <http://rdaregistry.info/Elements/c/C10005> .\n  ?id rdfs:label|skos:prefLabel ?label .\n  }\n}",
+  "depth" : 0,
+  "maxNGrams" : 5
+}

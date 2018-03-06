@@ -20,5 +20,5 @@
   "guess" : true,
   "query" : "PREFIX text: <http://jena.apache.org/text#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n\nSELECT ?id ?label ?ngram ?upperClass ?upperClassLabel {\n  VALUES ?ngram {\n     <VALUES>\n  }\n  FILTER(!regex(?ngram, \"^[0-9]+$\"))\n  BIND(STRLANG(LCASE(?ngram),\"fi\") AS ?label) \n  \n  GRAPH <http://www.yso.fi/onto/koko/> {\n    ?id skos:prefLabel ?label .\n  }\n}",
   "depth" : 0,
-  "maxNGrams" : 1
+  "maxNGrams" : 5
 }
